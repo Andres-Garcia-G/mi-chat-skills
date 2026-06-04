@@ -850,6 +850,8 @@ async function sendMessage() {
     const reply = data.content?.[0]?.text || 'Sin respuesta';
     messages.push({ role: 'assistant', content: reply });
     appendMsg('assistant', reply);
+    const lastMsg = document.querySelector('.msg.assistant:last-child');
+    if (lastMsg) storeRaw(lastMsg.id, reply);
 
   } catch (err) {
     document.getElementById(typingId)?.remove();
@@ -864,12 +866,107 @@ function appendMsg(role, text) {
   const container = document.getElementById('messagesContainer');
   const avatar = role === 'user' ? '👤' : '✦';
   const html = markdownToHtml(text);
+  const msgId = 'msg-' + Date.now();
+  const showDl = role === 'assistant' && currentSkill !== 'general';
+  const dlBar = showDl ? `
+    <div class="download-bar">
+      <button class="dl-btn excel" onclick="downloadExcel('${msgId}')">⬇ Excel</button>
+      <button class="dl-btn md" onclick="downloadMd('${msgId}')">⬇ Markdown</button>
+    </div>` : '';
   container.insertAdjacentHTML('beforeend', `
-    <div class="msg ${role}">
+    <div class="msg ${role}" id="${msgId}">
       <div class="msg-avatar">${avatar}</div>
-      <div class="msg-bubble">${html}</div>
+      <div class="msg-bubble">${html}${dlBar}</div>
     </div>`);
   container.scrollTop = container.scrollHeight;
+}
+
+// Store raw text per message id
+const rawTexts = {};
+
+function storeRaw(msgId, text) {
+  rawTexts[msgId] = text;
+}
+
+function downloadMd(msgId) {
+  const text = rawTexts[msgId] || '';
+  const blob = new Blob([text], {type: 'text/markdown'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'documentacion_pbi_' + new Date().toISOString().slice(0,10) + '.md';
+  a.click();
+}
+
+function downloadExcel(msgId) {
+  const text = rawTexts[msgId] || '';
+  const wb = XLSX.utils.book_new();
+  const sections = parseSections(text);
+
+  if (sections.length === 0) {
+    // fallback: one sheet with all text
+    const ws = XLSX.utils.aoa_to_sheet([[text]]);
+    XLSX.utils.book_append_sheet(wb, ws, 'Documentacion');
+  } else {
+    sections.forEach(({title, rows}) => {
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      // Auto column widths
+      const cols = rows[0] ? rows[0].map((_, i) => ({
+        wch: Math.min(60, Math.max(15, ...rows.map(r => String(r[i]||'').length)))
+      })) : [];
+      ws['!cols'] = cols;
+      XLSX.utils.book_append_sheet(wb, ws, title.slice(0, 31));
+    });
+  }
+
+  XLSX.writeFile(wb, 'DOC_PBI_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
+function parseSections(text) {
+  const lines = text.split('\n');
+  const sections = [];
+  let current = null;
+  let tableBuffer = [];
+  let textBuffer = [];
+
+  function flushTable() {
+    if (tableBuffer.length >= 2) {
+      const headers = tableBuffer[0].split('|').map(c => c.trim()).filter(Boolean);
+      const dataRows = tableBuffer.slice(2).map(r =>
+        r.split('|').map(c => c.trim()).filter(Boolean)
+      ).filter(r => r.length > 0);
+      if (current && headers.length > 0) {
+        if (!current.rows.length) current.rows.push(headers);
+        else current.rows.push(headers); // new table in same section
+        dataRows.forEach(r => current.rows.push(r));
+      }
+    }
+    tableBuffer = [];
+  }
+
+  function flushText() {
+    if (textBuffer.length > 0 && current) {
+      const joined = textBuffer.join('\n').trim();
+      if (joined) current.rows.push([joined]);
+      textBuffer = [];
+    }
+  }
+
+  for (const line of lines) {
+    if (line.match(/^#{1,4} /)) {
+      flushTable(); flushText();
+      const title = line.replace(/^#+\s+/, '').replace(/[*_`]/g, '').trim().slice(0, 31) || 'Sección';
+      current = { title, rows: [] };
+      sections.push(current);
+    } else if (line.startsWith('|')) {
+      flushText();
+      tableBuffer.push(line);
+    } else {
+      flushTable();
+      if (line.trim()) textBuffer.push(line.replace(/[*_`#]/g, '').trim());
+    }
+  }
+  flushTable(); flushText();
+
+  return sections.filter(s => s.rows.length > 0);
 }
 
 function markdownToHtml(text) {
