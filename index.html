@@ -708,7 +708,7 @@ function newChat() {
       <h2>${s.welcomeTitle}</h2>
       <p>${s.welcomeDesc}</p>
       <div class="welcome-chips">
-        ${s.chips.map(c => `<div class="chip" onclick="sendChip(\`${c}\`)">${c}</div>`).join('')}
+        ${s.chips.map(c => `<div class="chip" onclick="sendChip(this.textContent)">${c}</div>`).join('')}
       </div>
     </div>`;
 }
