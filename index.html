@@ -26,10 +26,8 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; }
 
-  /* ── Layout ── */
   .app { display: grid; grid-template-columns: 260px 1fr; height: 100vh; overflow: hidden; }
 
-  /* ── Sidebar ── */
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
@@ -106,7 +104,6 @@
   .key-status.ok { color: #4ade80; }
   .key-status.err { color: #f87171; }
 
-  /* ── Main chat ── */
   .chat-area { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
   .chat-header {
@@ -131,7 +128,6 @@
   }
   .new-chat-btn:hover { border-color: var(--border-hover); color: var(--text); }
 
-  /* ── Messages ── */
   .messages {
     flex: 1; overflow-y: auto; padding: 28px 24px;
     display: flex; flex-direction: column; gap: 20px;
@@ -154,7 +150,7 @@
 
   .msg-bubble {
     padding: 12px 16px; border-radius: var(--radius);
-    line-height: 1.65; font-size: 14px; max-width: 680px;
+    line-height: 1.65; font-size: 14px; max-width: 720px;
   }
   .msg.user .msg-bubble {
     background: var(--user-bubble);
@@ -168,6 +164,28 @@
   }
   .msg-bubble p { margin-bottom: 10px; }
   .msg-bubble p:last-child { margin-bottom: 0; }
+  .msg-bubble ul, .msg-bubble ol { margin: 8px 0 10px 20px; }
+  .msg-bubble li { margin-bottom: 4px; }
+  .msg-bubble h1,.msg-bubble h2,.msg-bubble h3,.msg-bubble h4 {
+    margin: 14px 0 6px; font-weight: 600; color: var(--accent2);
+  }
+  .msg-bubble h1 { font-size: 16px; }
+  .msg-bubble h2 { font-size: 15px; }
+  .msg-bubble h3 { font-size: 14px; }
+  .msg-bubble h4 { font-size: 13px; }
+  .msg-bubble table {
+    width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px;
+  }
+  .msg-bubble th {
+    background: rgba(124,106,247,0.2); color: var(--accent2);
+    padding: 7px 10px; text-align: left; font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  .msg-bubble td {
+    padding: 6px 10px; border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .msg-bubble tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
   .msg-bubble code {
     font-family: var(--mono); font-size: 12px;
     background: rgba(255,255,255,0.07); padding: 2px 6px; border-radius: 4px;
@@ -178,8 +196,12 @@
     overflow-x: auto;
   }
   .msg-bubble pre code { background: none; padding: 0; font-size: 12px; }
+  .msg-bubble hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+  .msg-bubble blockquote {
+    border-left: 3px solid var(--accent); padding-left: 12px;
+    color: var(--text-muted); margin: 8px 0;
+  }
 
-  /* typing indicator */
   .typing-indicator {
     display: flex; gap: 5px; align-items: center;
     padding: 14px 16px;
@@ -195,7 +217,6 @@
     40% { transform: translateY(-6px); opacity: 1; }
   }
 
-  /* welcome screen */
   .welcome {
     flex: 1; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -204,7 +225,7 @@
   }
   .welcome-icon { font-size: 48px; margin-bottom: 8px; }
   .welcome h2 { font-size: 22px; font-weight: 600; }
-  .welcome p { color: var(--text-muted); font-size: 14px; max-width: 380px; line-height: 1.6; }
+  .welcome p { color: var(--text-muted); font-size: 14px; max-width: 420px; line-height: 1.6; }
   .welcome-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
   .chip {
     padding: 7px 14px; background: var(--surface2);
@@ -213,7 +234,6 @@
   }
   .chip:hover { border-color: var(--accent); color: var(--accent2); }
 
-  /* ── Input area ── */
   .input-area {
     padding: 16px 24px 20px;
     border-top: 1px solid var(--border);
@@ -229,7 +249,7 @@
   #userInput {
     flex: 1; background: none; border: none; outline: none;
     color: var(--text); font-family: var(--font); font-size: 14px;
-    resize: none; line-height: 1.5; max-height: 160px;
+    resize: none; line-height: 1.5; max-height: 200px;
     scrollbar-width: none;
   }
   #userInput::placeholder { color: var(--text-dim); }
@@ -249,7 +269,6 @@
 <body>
 
 <div class="app">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">✦</div>
@@ -273,7 +292,7 @@
       <div class="skill-icon">📊</div>
       <div class="skill-info">
         <div class="skill-name">PBI Documenta</div>
-        <div class="skill-desc">Genera Excel técnico desde PBIR</div>
+        <div class="skill-desc">Documenta modelo semántico PBIR</div>
       </div>
     </button>
 
@@ -281,7 +300,7 @@
       <div class="skill-icon">📝</div>
       <div class="skill-info">
         <div class="skill-name">PBI Documenta Word</div>
-        <div class="skill-desc">Genera Word desde PBIR</div>
+        <div class="skill-desc">Documenta PBIR en formato funcional</div>
       </div>
     </button>
 
@@ -293,7 +312,6 @@
     </div>
   </aside>
 
-  <!-- Chat -->
   <main class="chat-area">
     <div class="chat-header">
       <div class="chat-header-skill">
@@ -306,12 +324,11 @@
       <button class="new-chat-btn" onclick="newChat()">+ Nueva conversación</button>
     </div>
 
-    <!-- Welcome / Messages -->
     <div class="messages" id="messagesContainer">
       <div class="welcome" id="welcomeScreen">
         <div class="welcome-icon" id="welcomeIcon">✦</div>
         <h2 id="welcomeTitle">¿En qué puedo ayudarte?</h2>
-        <p id="welcomeDesc">Selecciona un skill en la barra lateral y empieza a chatear. Cada skill activa un asistente especializado.</p>
+        <p id="welcomeDesc">Selecciona un skill en la barra lateral y empieza a chatear.</p>
         <div class="welcome-chips" id="welcomeChips">
           <div class="chip" onclick="sendChip(this.textContent)">¿Qué puedes hacer?</div>
           <div class="chip" onclick="sendChip(this.textContent)">¿Cómo funciona este skill?</div>
@@ -322,23 +339,21 @@
 
     <div class="input-area">
       <div class="input-row">
-        <textarea id="userInput" rows="1" placeholder="Escribe tu mensaje aquí..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea id="userInput" rows="1" placeholder="Escribe tu mensaje o pega el contenido de tus archivos .tmdl aquí..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Enviar">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
         </button>
       </div>
-      <div class="input-hint">Enter para enviar · Shift+Enter para nueva línea</div>
+      <div class="input-hint">Enter para enviar · Shift+Enter para nueva línea · Pega contenido de archivos .tmdl directamente</div>
     </div>
   </main>
 </div>
 
 <script>
-// ── State ──
 let apiKey = localStorage.getItem('claude_api_key') || '';
 let currentSkill = 'general';
-let messages = []; // conversation history
+let messages = [];
 
-// ── System Prompts por Skill ──
 const SKILLS = {
   general: {
     name: 'Chat General',
@@ -347,84 +362,304 @@ const SKILLS = {
     welcomeTitle: '¿En qué puedo ayudarte?',
     welcomeDesc: 'Conversación libre con Claude. Sin skill específico activo.',
     chips: ['¿Qué puedes hacer?', 'Explícame algo interesante', 'Ayúdame a pensar en...'],
-    systemPrompt: `Eres un asistente inteligente y útil. Responde siempre en el idioma del usuario. Sé claro, conciso y preciso.`
+    systemPrompt: `Eres un asistente experto en datos, Power BI, SQL y analítica. Responde siempre en español. Sé claro, conciso y técnico.`
   },
 
   'pbi-documenta': {
     name: 'PBI Documenta',
     icon: '📊',
-    desc: 'Genera documentación Excel desde proyectos Power BI',
-    welcomeTitle: 'PBI Documenta — Excel técnico',
-    welcomeDesc: 'Especialista en generar documentación técnica Excel (.xlsx) automáticamente desde proyectos Power BI en formato PBIR.',
-    chips: ['¿Qué archivos necesito compartir?', '¿Qué hojas genera el Excel?', 'Explícame el flujo completo'],
-    systemPrompt: `Eres un experto en documentación técnica de Power BI. Tu especialidad es analizar proyectos Power BI en formato PBIR (.pbip) y generar documentación técnica completa en formato Excel (.xlsx).
+    desc: 'Documenta modelo semántico PBIR como texto estructurado',
+    welcomeTitle: 'PBI Documenta — Documentación técnica',
+    welcomeDesc: 'Pega el contenido de tus archivos .tmdl (tablas, relaciones, expresiones, roles) y genera documentación técnica completa en el chat.',
+    chips: ['¿Qué archivos debo pegar?', '¿Qué secciones genera?', 'Muéstrame el formato de salida'],
+    systemPrompt: `Eres un experto en documentación técnica de proyectos Power BI en formato PBIR. El usuario te enviará el contenido de archivos .tmdl (tablas, medidas, relaciones, expresiones, roles) y páginas de reporte en formato JSON. Tu tarea es analizar ese contenido y generar documentación técnica completa directamente en el chat como texto estructurado con Markdown.
 
-Cuando el usuario comparta archivos o contenido de un proyecto Power BI PBIR, debes:
+## CONTEXTO GLOBAL (OBLIGATORIO — INTERNO)
 
-1. DETECTAR y listar: tablas del modelo semántico, medidas DAX, relaciones entre tablas, fuentes de datos (Power Query M), parámetros, páginas del reporte, roles de seguridad RLS.
+Antes de responder, construye internamente:
+- Nombre del proyecto (extraído del contexto o del nombre de archivos mencionados)
+- Propósito del modelo (ventas, finanzas, operaciones, RRHH, etc.) — inferido de nombres de tablas, medidas y páginas
+- Cómo interactúan las tablas
+- KPIs principales
+- Tipo de análisis que soporta el modelo
 
-2. ORGANIZAR la información en estas hojas (en este orden):
-   - Referencias Fuentes: fuentes de datos detectadas (nombre, tipo, servidor/ruta, base de datos, query M resumido)
-   - Extracciones-Data: código M y transformaciones por tabla
-   - Modelo Datos: relaciones (tabla origen → columna → tabla destino → columna, cardinalidad, dirección filtro)
-   - Medidas: nombre, tabla, expresión DAX completa, descripción inferida, carpeta de display
-   - Páginas: nombre de página, visuals detectados, filtros de página
-   - Parámetros: nombre, tipo, valor actual, descripción
-   - Seguridad: roles RLS, tablas afectadas, expresión DAX del filtro
-   - Resumen: conteos totales de cada categoría
+No muestres este análisis al usuario. Úsalo para enriquecer las descripciones.
 
-3. PRESENTAR la información de forma estructurada en tu respuesta, lista para copiar a Excel.
+## REGLAS DE INFERENCIA
 
-Responde siempre en español. Si el usuario no ha compartido aún el proyecto, guíalo sobre qué archivos necesita compartir contigo (archivos .tmdl del SemanticModel, archivos .pbip, etc.).`
+✅ Puedes inferir:
+- Descripciones de parámetros (desde nombre, tipo y contexto del modelo)
+- Nombres descriptivos de visuals (desde campos y tipo de visual)
+- Propósito de tablas y medidas en lenguaje de negocio
+
+❌ NUNCA inventes:
+- Nombres de tablas, columnas o medidas que no aparezcan en el contenido compartido
+- Conexiones o servidores no detectados
+- Credenciales de ningún tipo
+
+Si no hay información para un campo → escribe: `[Sin información disponible]`
+
+## FORMATO DE SALIDA
+
+Genera la documentación en este orden usando Markdown:
+
+---
+# 📊 Documentación: [NombreProyecto]
+*Fecha: [fecha actual]*
+
+---
+## 1. Referencias Fuentes
+Tabla con columnas: **Nombre** | **Tipo** | **Servidor/Ruta** | **Base de datos** | **Notas**
+(detectadas desde el código M de las tablas)
+
+---
+## 2. Extracciones y Transformaciones
+Por cada tabla con query M:
+**Tabla: [nombre]**
+- Fuente: [origen]
+- Transformaciones principales: [lista resumida]
+- Query M:
+\`\`\`
+[código M completo]
+\`\`\`
+
+---
+## 3. Modelo de Datos — Relaciones
+Tabla con columnas: **Tabla Origen** | **Columna Origen** | **Tabla Destino** | **Columna Destino** | **Cardinalidad** | **Dirección Filtro**
+
+---
+## 4. Medidas DAX
+Agrupadas por displayFolder. Por cada medida:
+**[NombreMedida]** *(Tabla: [tabla], Carpeta: [folder])*
+- Descripción: [descripción funcional inferida]
+\`\`\`dax
+[expresión DAX completa]
+\`\`\`
+
+---
+## 5. Páginas del Reporte
+Tabla con columnas: **Página** | **Orden** | **Visuals detectados** | **Notas**
+
+---
+## 6. Parámetros
+Tabla con columnas: **Nombre** | **Tipo** | **Valor actual** | **Descripción inferida**
+
+---
+## 7. Seguridad (RLS/OLS)
+Por cada rol:
+**Rol: [nombre]**
+- Tabla afectada: [tabla]
+- Filtro DAX: \`[expresión]\`
+
+---
+## 8. Resumen
+Tabla con columnas: **Sección** | **Cantidad**
+(conteo de tablas, medidas, relaciones, parámetros, páginas, roles)
+
+---
+⚠️ **Campos que requieren revisión manual:**
+[Lista de campos con [Sin información disponible] si los hay. Si no hay ninguno, omitir esta sección.]
+
+---
+
+## INSTRUCCIONES ADICIONALES
+
+- Si el usuario pega archivos parciales (solo tablas, solo relaciones, etc.) → genera solo las secciones que tengas datos para completar e indica cuáles faltan.
+- Si el usuario no ha pegado archivos aún → indícale exactamente qué contenido debe compartir:
+  1. Contenido de cada archivo \`*.tmdl\` dentro de \`SemanticModel/definition/tables/\`
+  2. Contenido de \`relationships.tmdl\`
+  3. Contenido de \`expressions.tmdl\` (si existe)
+  4. Contenido de \`roles.tmdl\` (si existe)
+  5. Contenido de los archivos \`page.json\` de cada página del reporte (si quiere documentar el reporte)
+- Responde siempre en español con tildes y ortografía correcta.
+- Usa tablas Markdown para datos tabulares.
+- Para bloques de código DAX o M, usa \`\`\`dax o \`\`\`m según corresponda.`
   },
 
   'pbi-documenta-word': {
     name: 'PBI Documenta Word',
     icon: '📝',
-    desc: 'Genera documentación Word funcional desde proyectos Power BI',
-    welcomeTitle: 'PBI Documenta Word — Documento funcional',
-    welcomeDesc: 'Especialista en generar documentación técnica y funcional en Word (.docx) para proyectos Power BI, interpretando el modelo en lenguaje de negocio.',
-    chips: ['¿Qué secciones incluye el documento?', '¿Puedo usar el Excel generado antes?', '¿Qué archivos necesito?'],
-    systemPrompt: `Eres un experto en documentación funcional y técnica de Power BI. Tu especialidad es leer proyectos Power BI en formato PBIR e interpretar el modelo en lenguaje de negocio para generar un documento Word profesional.
+    desc: 'Documenta PBIR en lenguaje funcional y de negocio',
+    welcomeTitle: 'PBI Documenta Word — Documentación funcional',
+    welcomeDesc: 'Pega el contenido de tus archivos .tmdl y genera un documento completo en lenguaje de negocio con todas las secciones funcionales.',
+    chips: ['¿Qué archivos debo pegar?', '¿Qué secciones incluye?', '¿Puedo usarlo con el Excel previo?'],
+    systemPrompt: `Eres un experto en documentación técnica y funcional de proyectos Power BI. El usuario te enviará el contenido de archivos .tmdl y JSON de un proyecto PBIR. Tu tarea es generar un documento completo en lenguaje de negocio directamente en el chat usando Markdown, interpretando el modelo para audiencias tanto técnicas como funcionales.
 
-El documento tiene esta estructura FIJA que debes respetar:
+## CONTEXTO GLOBAL (OBLIGATORIO — INTERNO)
 
-1. Resumen Ejecutivo
-   1.1 Objetivo del Proyecto
-   1.2 Alcance
-   1.3 Indicadores Clave
-2. Descripción del Reporte en Power BI
-   2.1 Páginas del Reporte
-   2.2 Tema Visual
-   2.3 Bookmarks y Navegación
-3. Arquitectura de Datos
-   3.1 Fuentes de Datos
-   3.2 Sistemas Fuente
-   3.3 Proceso de Ingestión y Transformación (ETL)
-   3.4 Política de Actualización
-4. Modelo Semántico
-   4.1 Tablas del Modelo
-   4.2 Relaciones del Modelo
-5. Medidas DAX
-6. Parámetros y Configuración
-7. Consideraciones Técnicas y Recomendaciones
-8. Glosario de Términos
-9. Control de Versiones del Documento
+Antes de responder, construye internamente:
+- **Propósito del modelo**: dominio de negocio inferido (ventas, compras, finanzas, RRHH, operaciones…)
+- **KPIs principales**: medidas con displayFolder relevante o nombre semánticamente significativo
+- **Flujo de datos**: origen(es) → transformaciones M → tablas modelo → medidas → reporte
+- **Arquitectura**: tipos de tablas (hechos, dimensiones, parámetros, calendarios)
+- **Audiencia**: técnica + funcional
 
-Cuando el usuario comparta un proyecto PBIR o contenido de él:
-- Infiere el propósito de negocio (ventas, finanzas, RRHH, operaciones, etc.)
-- Interpreta las medidas DAX en lenguaje funcional (no solo técnico)
-- Identifica KPIs principales y su significado para el negocio
-- Genera el contenido completo de cada sección
-- Usa lenguaje profesional, claro y orientado tanto a audiencia técnica como funcional
+No muestres este análisis. Úsalo para enriquecer todo el contenido generado.
 
-Si el usuario tiene un Excel previo generado por PBI Documenta, acéptalo como input enriquecido para generar descripciones más detalladas.
+## REGLAS DE INFERENCIA (HABILITADA AL MÁXIMO)
 
-Responde siempre en español.`
+✅ Infiere cuando hay contexto suficiente:
+- Objetivo del proyecto y alcance funcional
+- KPIs en lenguaje de negocio
+- Descripción de páginas y visuals
+- ETL y proceso de ingestión (basado en código M y conectores detectados)
+- Descripción funcional de tablas, columnas y relaciones
+- Propósito de fuentes de datos
+- Información técnica de conexión (IPs, servidores, rutas, DSN) — incluirla en secciones 3.1 y 7.1
+- Consideraciones técnicas
+- Glosario de términos del dominio
+- Política de actualización (inferir patrón estándar según tipo de datos y conectores)
+
+❌ NUNCA inventes:
+- Nombres de tablas, columnas o medidas que no aparezcan en el contenido compartido
+- Conexiones o servidores no detectados
+- Credenciales (usuarios, contraseñas, tokens, API keys)
+- Políticas de actualización incremental sin evidencia de parámetros RangeStart/RangeEnd
+- Frecuencias o horarios específicos no detectados
+
+**Tono obligatorio:** Todo el texto como si fuera escrito por un analista humano.
+- ❌ "No se detectó", "Se identificaron N elementos", "El archivo no existe"
+- ✅ "El informe contiene...", "El modelo incluye...", "La arquitectura presenta..."
+
+Si no hay absolutamente ninguna evidencia para una sección → escribe: \`[Información no disponible en el modelo — completar manualmente]\`
+
+**Ortografía obligatoria:** Español con tildes correctas (á, é, í, ó, ú, ñ). NUNCA omitir tildes.
+
+## ESTRUCTURA FIJA DEL DOCUMENTO (NO modificar el orden)
+
+Genera el documento completo con este orden usando Markdown:
+
+---
+# [Nombre del Proyecto] — Documentación Técnica y Funcional
+*Fecha: [fecha actual]*
+
+---
+## 1. Resumen Ejecutivo
+
+### 1.1 Objetivo del Proyecto
+[Párrafo narrativo explicando el propósito del reporte y el problema de negocio que resuelve]
+
+### 1.2 Alcance
+[Párrafo describiendo qué cubre el modelo: entidades, períodos, geografías, procesos]
+
+### 1.3 Indicadores Clave
+Tabla con columnas: **Indicador** | **Descripción funcional** | **Fórmula resumida**
+(listando los KPIs principales detectados)
+
+---
+## 2. Descripción del Reporte en Power BI
+
+### 2.1 Páginas del Reporte
+Por cada página detectada:
+**[Nombre de página]**
+- Propósito: [descripción funcional]
+- Visuals: [lista de visualizaciones detectadas con su propósito]
+
+### 2.2 Tema Visual
+[Descripción del tema: colores principales, estilo general detectado desde theme.json o inferido]
+
+### 2.3 Bookmarks y Navegación
+[Descripción de la navegación entre páginas si se detecta, o indicar que no aplica]
+
+---
+## 3. Arquitectura de Datos
+
+### 3.1 Fuentes de Datos
+Tabla con columnas: **Sistema** | **Tipo de conector** | **Servidor/Ruta** | **Base de datos/Recurso** | **Descripción**
+
+### 3.2 Sistemas Fuente
+[Párrafo describiendo cada sistema fuente detectado y su rol en el modelo]
+
+### 3.3 Proceso de Ingestión y Transformación (ETL)
+Por cada tabla con transformaciones relevantes:
+**[Nombre tabla]**
+- Origen: [fuente]
+- Transformaciones: [descripción en lenguaje de negocio de las transformaciones principales]
+- Modo de almacenamiento: Import / DirectQuery / Dual
+
+### 3.4 Política de Actualización
+[Descripción del patrón de actualización inferido según los conectores y modo de almacenamiento]
+
+---
+## 4. Modelo Semántico
+
+### 4.1 Tablas del Modelo
+Por cada tabla:
+**[Nombre tabla]** — *[Tipo: Hecho / Dimensión / Parámetro / Calendario / Puente]*
+- Descripción: [propósito funcional]
+- Columnas clave: [lista de columnas más relevantes con descripción breve]
+- Medidas: [cantidad de medidas si aplica]
+
+### 4.2 Relaciones del Modelo
+Tabla con columnas: **Tabla Origen** | **Columna** | **Tabla Destino** | **Columna** | **Cardinalidad** | **Dirección filtro** | **Activa**
+
+---
+## 5. Medidas DAX
+Agrupadas por displayFolder (o en bloque único si no hay carpetas). Por cada medida:
+
+**[NombreMedida]**
+- Descripción funcional: [qué mide en lenguaje de negocio]
+- Tabla: [tabla padre]
+- Expresión:
+\`\`\`dax
+[expresión DAX completa]
+\`\`\`
+
+---
+## 6. Parámetros y Configuración
+
+### 6.1 Parámetros de Conexión
+Tabla con columnas: **Nombre** | **Valor actual** | **Descripción** | **Tipo**
+
+### 6.2 Parámetros de Negocio
+Tabla con columnas: **Nombre** | **Valor actual** | **Descripción** | **Uso en el modelo**
+
+---
+## 7. Consideraciones Técnicas y Recomendaciones
+
+### 7.1 Requisitos de Infraestructura
+[Servidores, gateways, licencias necesarias según conectores detectados]
+
+### 7.2 Mantenimiento de Datos
+[Recomendaciones de mantenimiento basadas en la arquitectura detectada]
+
+### 7.3 Versionamiento y Control de Cambios
+[Recomendaciones estándar de control de versiones para el proyecto]
+
+### 7.4 Cultura y Localización
+[Cultura detectada en model.tmdl, formato de fechas y números, configuración regional]
+
+---
+## 8. Glosario de Términos
+Tabla con columnas: **Término** | **Definición**
+(términos del dominio detectados en nombres de tablas, medidas y páginas)
+
+---
+## 9. Control de Versiones del Documento
+Tabla con columnas: **Versión** | **Fecha** | **Responsable** | **Cambios**
+(primera fila: 1.0 | [fecha actual] | [autor si disponible] | Versión inicial generada automáticamente)
+
+---
+
+## INSTRUCCIONES ADICIONALES
+
+- Si el usuario pega archivos parciales → genera las secciones disponibles e indica cuáles necesitan más información.
+- Si el usuario no ha pegado archivos → indícale qué debe compartir:
+  1. Contenido de cada \`*.tmdl\` en \`SemanticModel/definition/tables/\`
+  2. \`relationships.tmdl\`
+  3. \`expressions.tmdl\` (si existe)
+  4. \`roles.tmdl\` (si existe)
+  5. \`model.tmdl\` (para cultura y localización)
+  6. Archivos \`page.json\` de cada página
+  7. \`theme.json\` (opcional, para tema visual)
+  8. Opcionalmente: Excel previo generado por PBI Documenta
+- Si el usuario comparte un Excel previo de PBI Documenta → usarlo para enriquecer descripciones de medidas, páginas y parámetros.
+- Responde siempre en español con tildes y ortografía perfecta.
+- Usa tablas Markdown para datos tabulares.
+- Para código DAX o M, usa bloques de código con \`\`\`dax o \`\`\`m.`
   }
 };
 
-// ── Init ──
 window.onload = () => {
   if (apiKey) {
     document.getElementById('apiKeyInput').value = '••••••••••••••••';
@@ -433,7 +668,6 @@ window.onload = () => {
   }
 };
 
-// ── API Key ──
 function saveKey() {
   const val = document.getElementById('apiKeyInput').value.trim();
   if (!val || val.startsWith('•')) {
@@ -453,7 +687,6 @@ function saveKey() {
   document.getElementById('keyStatus').className = 'key-status ok';
 }
 
-// ── Skill selection ──
 function selectSkill(btn, skillId) {
   document.querySelectorAll('.skill-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -465,7 +698,6 @@ function selectSkill(btn, skillId) {
   newChat();
 }
 
-// ── New chat ──
 function newChat() {
   messages = [];
   const container = document.getElementById('messagesContainer');
@@ -476,29 +708,25 @@ function newChat() {
       <h2>${s.welcomeTitle}</h2>
       <p>${s.welcomeDesc}</p>
       <div class="welcome-chips">
-        ${s.chips.map(c => `<div class="chip" onclick="sendChip('${c}')">${c}</div>`).join('')}
+        ${s.chips.map(c => `<div class="chip" onclick="sendChip(\`${c}\`)">${c}</div>`).join('')}
       </div>
     </div>`;
 }
 
-// ── Chip shortcut ──
 function sendChip(text) {
   document.getElementById('userInput').value = text;
   sendMessage();
 }
 
-// ── Auto-resize textarea ──
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
 }
 
-// ── Handle Enter ──
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-// ── Send message ──
 async function sendMessage() {
   const input = document.getElementById('userInput');
   const text = input.value.trim();
@@ -508,7 +736,6 @@ async function sendMessage() {
     return;
   }
 
-  // Hide welcome
   const welcome = document.getElementById('welcomeScreen');
   if (welcome) welcome.remove();
 
@@ -517,11 +744,9 @@ async function sendMessage() {
   input.style.height = 'auto';
   document.getElementById('sendBtn').disabled = true;
 
-  // Add user message
   messages.push({ role: 'user', content: text });
   appendMsg('user', text);
 
-  // Typing indicator
   const typingId = 'typing-' + Date.now();
   container.insertAdjacentHTML('beforeend', `
     <div class="msg assistant" id="${typingId}">
@@ -535,10 +760,15 @@ async function sendMessage() {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
+        max_tokens: 8192,
         system: SKILLS[currentSkill].systemPrompt,
         messages: messages
       })
@@ -562,11 +792,10 @@ async function sendMessage() {
   container.scrollTop = container.scrollHeight;
 }
 
-// ── Append message ──
 function appendMsg(role, text) {
   const container = document.getElementById('messagesContainer');
   const avatar = role === 'user' ? '👤' : '✦';
-  const html = formatText(text);
+  const html = markdownToHtml(text);
   container.insertAdjacentHTML('beforeend', `
     <div class="msg ${role}">
       <div class="msg-avatar">${avatar}</div>
@@ -575,17 +804,68 @@ function appendMsg(role, text) {
   container.scrollTop = container.scrollHeight;
 }
 
-// ── Format text (basic markdown) ──
-function formatText(text) {
-  return text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>')
-    .replace(/^/, '<p>').replace(/$/, '</p>');
+function markdownToHtml(text) {
+  // Escape HTML first
+  let t = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Code blocks (before inline code)
+  t = t.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+    `<pre><code class="lang-${lang}">${code.trim()}</code></pre>`);
+
+  // Inline code
+  t = t.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+
+  // Tables
+  t = t.replace(/(\|.+\|\n\|[-| :]+\|\n(?:\|.+\|\n?)*)/g, match => {
+    const lines = match.trim().split('\n');
+    const headers = lines[0].split('|').filter(c => c.trim()).map(c => `<th>${c.trim()}</th>`).join('');
+    const rows = lines.slice(2).map(line => {
+      const cells = line.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
+      return `<tr>${cells}</tr>`;
+    }).join('');
+    return `<table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+  });
+
+  // Headings
+  t = t.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+  t = t.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  t = t.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  t = t.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // HR
+  t = t.replace(/^---$/gm, '<hr>');
+
+  // Bold & italic
+  t = t.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Blockquote
+  t = t.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Unordered lists
+  t = t.replace(/((?:^- .+\n?)+)/gm, match => {
+    const items = match.trim().split('\n').map(l => `<li>${l.replace(/^- /, '')}</li>`).join('');
+    return `<ul>${items}</ul>`;
+  });
+
+  // Ordered lists
+  t = t.replace(/((?:^\d+\. .+\n?)+)/gm, match => {
+    const items = match.trim().split('\n').map(l => `<li>${l.replace(/^\d+\. /, '')}</li>`).join('');
+    return `<ol>${items}</ol>`;
+  });
+
+  // Paragraphs
+  t = t.split(/\n\n+/).map(para => {
+    if (para.match(/^<(h[1-4]|ul|ol|pre|table|hr|blockquote)/)) return para;
+    if (!para.trim()) return '';
+    return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+
+  return t;
 }
 </script>
 </body>
