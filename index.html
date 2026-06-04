@@ -263,6 +263,19 @@
   .send-btn:hover { background: var(--accent2); }
   .send-btn:disabled { background: var(--surface); opacity: .4; cursor: default; }
   .send-btn svg { width: 16px; height: 16px; fill: white; }
+  .attach-btn {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; flex-shrink: 0;
+  }
+  .attach-btn:hover { border-color: var(--accent); color: var(--accent2); }
+  .attach-btn svg { width: 18px; height: 18px; }
+  .file-status { font-size: 11px; margin-top: 6px; min-height: 16px; }
+  .file-status.ok { color: #4ade80; }
+  .file-status.err { color: #f87171; }
+  .file-status.loading { color: var(--text-muted); }
   .input-hint { font-size: 11px; color: var(--text-dim); text-align: center; margin-top: 8px; }
 </style>
 </head>
@@ -339,16 +352,22 @@
 
     <div class="input-area">
       <div class="input-row">
-        <textarea id="userInput" rows="1" placeholder="Escribe tu mensaje o pega el contenido de tus archivos .tmdl aquí..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Adjuntar .zip del proyecto PBIR">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+        </button>
+        <input type="file" id="fileInput" accept=".zip" style="display:none" onchange="handleFileUpload(event)">
+        <textarea id="userInput" rows="1" placeholder="Escribe tu mensaje o adjunta el .zip de tu proyecto PBIR..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Enviar">
           <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
         </button>
       </div>
-      <div class="input-hint">Enter para enviar · Shift+Enter para nueva línea · Pega contenido de archivos .tmdl directamente</div>
+      <div class="file-status" id="fileStatus"></div>
+      <div class="input-hint">Enter para enviar · Shift+Enter para nueva línea · 📎 adjunta el .zip del proyecto PBIR</div>
     </div>
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 let apiKey = localStorage.getItem('claude_api_key') || '';
 let currentSkill = 'general';
@@ -725,6 +744,60 @@ function autoResize(el) {
 
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+async function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('fileStatus');
+  statusEl.textContent = 'Leyendo ' + file.name + '...';
+  statusEl.className = 'file-status loading';
+
+  try {
+    const zip = await JSZip.loadAsync(file);
+    const EXTS = ['.tmdl', '.json', '.pbip'];
+    const SKIP = ['__MACOSX', '.DS_Store', 'StaticResources', '.png', '.svg', '.jpg'];
+
+    let output = '=== PROYECTO: ' + file.name.replace('.zip','') + ' ===
+
+';
+    let count = 0;
+
+    const files = Object.keys(zip.files).sort();
+    for (const path of files) {
+      const entry = zip.files[path];
+      if (entry.dir) continue;
+      if (SKIP.some(s => path.includes(s))) continue;
+      if (!EXTS.some(e => path.endsWith(e))) continue;
+
+      const text = await entry.async('string');
+      if (!text.trim()) continue;
+
+      output += '--- ARCHIVO: ' + path + ' ---
+';
+      output += text + '
+
+';
+      count++;
+    }
+
+    if (count === 0) {
+      statusEl.textContent = 'No se encontraron archivos .tmdl o .json en el zip.';
+      statusEl.className = 'file-status err';
+      return;
+    }
+
+    document.getElementById('userInput').value = output;
+    autoResize(document.getElementById('userInput'));
+    statusEl.textContent = count + ' archivos extraídos de ' + file.name + '. Agrega tu mensaje arriba y envía.';
+    statusEl.className = 'file-status ok';
+  } catch(e) {
+    statusEl.textContent = 'Error leyendo el zip: ' + e.message;
+    statusEl.className = 'file-status err';
+  }
+
+  event.target.value = '';
 }
 
 async function sendMessage() {
