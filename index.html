@@ -759,9 +759,7 @@ async function handleFileUpload(event) {
     const EXTS = ['.tmdl', '.json', '.pbip'];
     const SKIP = ['__MACOSX', '.DS_Store', 'StaticResources', '.png', '.svg', '.jpg'];
 
-    let output = '=== PROYECTO: ' + file.name.replace('.zip','') + ' ===
-
-';
+    let output = '=== PROYECTO: ' + file.name.replace('.zip','') + ' ===\n\n';
     let count = 0;
 
     const files = Object.keys(zip.files).sort();
@@ -774,11 +772,8 @@ async function handleFileUpload(event) {
       const text = await entry.async('string');
       if (!text.trim()) continue;
 
-      output += '--- ARCHIVO: ' + path + ' ---
-';
-      output += text + '
-
-';
+      output += '--- ARCHIVO: ' + path + ' ---\n';
+      output += text + '\n\n';
       count++;
     }
 
